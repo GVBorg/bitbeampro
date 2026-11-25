@@ -1,0 +1,1 @@
+html,body{-webkit-user-select:none;user-select:none}input,textarea,select,[contenteditable]:not([contenteditable=false]),[contenteditable]:not([contenteditable=false]) *,pre,code,.selectable{-webkit-user-select:text;user-select:text}img,canvas,svg{-webkit-user-drag:none}

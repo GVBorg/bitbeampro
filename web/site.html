@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#090d18">
+  <title>BitBeam</title>
+  <link rel="icon" type="image/png" href="./favicon.png">
+  <link rel="stylesheet" href="./bitbeam.css">
+  
+<link rel="stylesheet" href="./release27.css"><link rel="stylesheet" href="./interface-theme50.css"><link rel="stylesheet" href="./polish66.css"><link rel="stylesheet" href="./no-select80.css"><link rel="stylesheet" href="./fullscreen-hidden106.css"><link rel="stylesheet" href="./layout107.css"><link rel="stylesheet" href="./site-mode.css"></head>
+<body class="bb-site">
+  <div id="app"><div class="project-bar" id="micro-controls"><strong>USB DMX</strong><select id="output-device" aria-label="USB output device"><option value="5604" disabled>SoundSwitch</option><option value="83">Micro · Universe 1</option><option value="84">Control One · Universe 1</option></select><button id="micro-connect">CONNECT USB</button><button id="micro-stop">STOP OUTPUT</button><label><input id="micro-auto" type="checkbox">Auto reconnect</label><label><input id="micro-confirm" type="checkbox">Fixture modes and DMX addresses verified</label><span id="micro-state">Simulator only</span></div>
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">◈</span><div><strong>BEATBEAM</strong><small>REMOTE · LIGHTING DESK</small></div></div>
+      <nav aria-label="Main views">
+        
+        <button class="nav" data-view="visualizer">LIVE</button>
+        <button class="nav" data-view="timeline">TRACK SHOW</button>
+        <button class="nav" data-view="patch">FIXTURES</button>
+        <button class="nav" data-view="groups">GROUPS</button><button class="nav" data-view="profiles">PROFILES</button><button class="nav" data-view="advanced">AUDIO / CALIBRATION</button><button class="nav" data-view="laser">LASER</button><button class="nav" data-view="controlone">CONTROLLER</button><button class="nav" data-view="connect">CONNECTION</button>
+      </nav>
+      <div class="top-actions"><span id="status" class="status"><i></i> CONNECTING</span><button id="undo" class="history-btn" type="button" title="Undo (⌘/Ctrl+Z)" aria-label="Undo" disabled>↶ <span>UNDO</span></button><button id="redo" class="history-btn" type="button" title="Redo (⌘/Ctrl+Shift+Z)" aria-label="Redo" disabled>↷ <span>REDO</span></button><button id="fullscreen" class="icon-btn" title="Full screen">⛶</button></div>
+    </header>
+
+    <div class="project-bar">
+      <span class="hint" id="app-version70">BitBeam 1.0.0</span><strong id="project-name">Untitled</strong><span id="save-state" role="status">Connecting…</span>
+      <button id="project-new" class="outline">NEW</button><button id="project-save" class="primary">SAVE</button><button id="project-save-as" class="outline">SAVE AS…</button>
+      <select id="project-list" aria-label="Saved projects"></select><button id="project-open" class="outline">OPEN</button>
+      <button id="project-restore" class="outline">PREVIOUS VERSIONS</button>
+      <label class="backup-files"><input id="backup-files" type="checkbox" checked> Include reference photos/PDF</label><button id="project-export" class="outline">DOWNLOAD BACKUP</button><label class="outline file-pill">OPEN FILE<input id="project-import" type="file" accept=".json,.beatbeam" hidden></label>
+    </div>
+    <main>
+      <section id="view-live" class="view">
+        <div class="page-title"><div><span class="eyebrow">PERFORMANCE CONTROL</span><h1>Live desk</h1></div><p>Color and movement run independently. Choose a look, then shape it on the fly.</p></div>
+        <div class="preset-section"><div class="section-heading"><div><span class="eyebrow">INSTANT RECALL</span><h2>Looks</h2></div><button id="auto-look" class="primary">🎲 ROLL LOOK</button><button id="auto-show" class="primary">▶ AUTO SHOW</button><button id="save-look" class="outline">SAVE AS NEW PRESET</button></div><button id="save-current-live" class="primary">SAVE TO CURRENT PRESET</button><div id="look-grid" class="look-grid"></div></div>
+        <div class="transport-bar">
+          <div class="tempo-card"><span class="label">TEMPO</span><div class="tempo-line"><input id="bpm" type="number" min="30" max="300" step="0.1" value="120" aria-label="BPM"><span>BPM</span><button id="tap" class="tap">TAP</button></div><small id="beat-count">BEAT 1 / 4</small></div>
+          <div class="master-card"><label class="label" for="master">Master <strong id="master-value">80%</strong></label><input id="master" type="range" min="0" max="100" value="80"></div>
+          <button id="blinder" class="impact" title="Hold for white hit"><span>✦</span> BLINDER <small>HOLD</small></button>
+          <button id="blackout" class="blackout"><span>◼</span> BLACKOUT</button>
+        </div>
+        <div class="wheels-row">
+          <div class="wheel-card color-card"><div class="card-head"><span>01 / COLOR ENGINE</span><strong id="color-fx-title">PULSE</strong></div><div id="color-wheel" class="fx-wheel color-wheel"></div><div class="under-wheel"><label>BASE COLOR <input id="color" type="color" value="#22d5ff"></label><span id="color-value">#22D5FF</span></div></div>
+          <div class="wheel-card move-card"><div class="card-head"><span>02 / MOVEMENT ENGINE</span><strong id="move-fx-title">SWEEP</strong></div><div id="move-wheel" class="fx-wheel move-wheel"></div><div class="under-wheel"><label for="move-size">SIZE <b id="move-size-value">65%</b></label><input id="move-size" type="range" min="0" max="100" value="65"></div></div>
+          <div class="preview-card"><div class="card-head"><span>STAGE PREVIEW</span><strong>ONE UNIVERSE</strong></div><div id="stage" class="stage"></div><div class="preview-foot"><span id="fixture-count">12 FIXTURES</span><span>DEMO PATCH · VERIFY BEFORE USE</span></div><div class="position-controls"><label>PAN <input id="pan" type="range" min="0" max="100"></label><label>TILT <input id="tilt" type="range" min="0" max="100"></label></div></div>
+        </div>
+        <div id="live-programs" class="output-card"></div>
+        <div class="output-card effect-settings">
+          <span class="eyebrow">PALETTE · SPEED · FADE</span>
+          <div class="settings-grid"><label>COLOR SPEED<select id="color-speed"></select></label><label>MOVEMENT SPEED<select id="movement-speed"></select></label><label>CHASE FADE <span id="chase-fade-value"></span><input id="chase-fade" type="range" min="0" max="100"></label></div>
+          <div id="palette-list" class="palette-list"></div><button id="palette-add" class="outline">+ COLOR</button>
+          <div class="settings-grid"><label>INTENSITY FADE (s)<input id="fade-intensity" type="number" min="0" max="30" step=".1"></label><label>COLOR FADE (s)<input id="fade-color" type="number" min="0" max="30" step=".1"></label><label>POSITION FADE (s)<input id="fade-position" type="number" min="0" max="30" step=".1"></label></div>
+          <div class="inline-actions"><button id="look-update" class="outline">UPDATE CURRENT LOOK</button><button id="look-rename" class="outline">RENAME LOOK</button><button id="look-delete" class="outline">DELETE LOOK</button></div>
+          <p class="hint">Speeds follow BPM. Chase Fade controls blending inside the effect; the three Fade times control scene and parameter transitions. Blackout is immediate.</p>
+        </div>
+
+      </section>
+
+      <section id="view-visualizer" class="view hidden">
+        <div class="page-title"><div><span class="eyebrow">VIRTUAL STAGE</span><h1>Scene visualizer</h1></div><p>Design looks without connecting fixtures. Drag the stage view to change the camera; drag fixtures on the plot to place them.</p></div>
+        <div class="viz-layout">
+          <div class="viz-main">
+            <div class="viz-toolbar"><div><span class="eyebrow">STAGE RENDER</span><strong id="viz-look-name">Ocean Drive</strong></div><div class="inline-actions"><button id="viz-play" class="outline">PAUSE</button><button id="viz-reset-camera" class="outline">RESET CAMERA</button></div></div>
+            <canvas id="viz-canvas" aria-label="Virtual stage with animated fixtures and beams"></canvas>
+            <canvas id="viz-spectrogram" aria-label="Live spectrogram, same data as the stage lights"></canvas>
+            <div class="viz-footer"><span>DRAG TO ORBIT · SCROLL TO ZOOM</span><span id="viz-status">12 FIXTURES · 120 BPM</span></div>
+            <div class="viz-panel"><div class="viz-panel-title"><span class="eyebrow">STAGE LAYOUT</span><h2>Fixture positions</h2></div><canvas id="viz-plot" aria-label="Top-down stage plot; drag a fixture to move it"></canvas><div class="viz-dimensions"><label>WIDTH (m)<input id="viz-width" type="number" min="2" max="30" step="0.5"></label><label>DEPTH (m)<input id="viz-depth" type="number" min="2" max="30" step="0.5"></label><label>HEIGHT (m)<input id="viz-height" type="number" min="1" max="20" step="0.1"></label></div><label class="viz-field">HAZE <span id="viz-haze-value">65%</span><input id="viz-haze" type="range" min="0" max="100"></label></div>
+            <div class="viz-presets"><span class="eyebrow">LOOKS</span><div id="viz-presets" class="look-grid"></div><div class="inline-actions"><button id="save-current-viz" class="primary">SAVE TO CURRENT PRESET</button><button id="save-new-viz" class="outline">SAVE AS NEW PRESET</button></div></div>
+          </div>
+          <aside class="viz-sidebar">
+            <div class="viz-panel"><div class="viz-panel-title"><span class="eyebrow">SCENE DESIGNER</span><h2>Current look</h2></div><label class="viz-field">LOOK<select id="viz-look"></select></label><div class="inline-actions"><button id="viz-new-look" class="primary">+ NEW LOOK</button><button id="viz-clear-all" class="outline">CLEAR OVERRIDES</button></div><p class="hint">Changes to a fixture are saved inside this look and play back from Track Show cues.</p></div>
+            <div class="viz-panel"><div class="viz-panel-title"><span class="eyebrow">SELECTED FIXTURE</span><h2 id="viz-fixture-name">Moving Head 1</h2></div><label class="viz-field">FIXTURE<select id="viz-fixture"></select></label><div class="viz-dimensions"><label>X (m)<input id="viz-x" type="number" step="0.1"></label><label>DEPTH FROM REAR (m)<input id="viz-y" type="number" step="0.1"></label><label>HEIGHT (m)<input id="viz-z" type="number" min="0" max="10" step="0.1"></label></div><div class="viz-divider"></div><span class="eyebrow">THIS LOOK · FIXTURE OVERRIDE</span><label class="viz-field">COLOR <input id="viz-color" type="color"></label><label class="viz-field">INTENSITY <span id="viz-intensity-value">100%</span><input id="viz-intensity" type="range" min="0" max="100"></label><label class="viz-field">PAN <span id="viz-pan-value">50%</span><input id="viz-pan" type="range" min="0" max="100"></label><label class="viz-field">TILT <span id="viz-tilt-value">55%</span><input id="viz-tilt" type="range" min="0" max="100"></label><div id="viz-wheel-controls"></div><div id="viz-mount-controls"></div><button id="viz-clear-fixture" class="outline">RESET THIS FIXTURE</button></div>
+          </aside>
+        </div>
+      </section>
+
+      <section id="view-timeline" class="view hidden">
+        <div class="page-title"><div><span class="eyebrow">TRACK PROGRAMMING</span><h1>Track show</h1></div><p>Place cues on a shared virtual timeline. Track audio synchronization will come after the DMX interface is verified.</p></div>
+        <div class="timeline-shell"><div class="track-top"><strong id="track-name">Shared cue transport · no audio playback in this build</strong><span id="timecode">00:00 / 01:04</span></div><div class="timeline-controls"><button id="play" class="play">▶</button><input id="scrub" type="range" min="0" max="64" step="0.01" value="0" aria-label="Track position"><button id="add-cue" class="outline">+ CUE AT PLAYHEAD</button></div><div id="cue-track" class="cue-track"></div></div>
+        <div class="section-heading"><div><span class="eyebrow">PROGRAMMED CHANGES</span><h2>Cues</h2></div><p>Mac and iPad share this transport; export saves the cue program.</p></div><div id="cue-list" class="cue-list"></div>
+        <div class="section-heading"><div><span class="eyebrow">SHOW FILE</span><h2>Save and load</h2></div><div class="inline-actions"><button id="export" class="outline">EXPORT JSON</button><label class="outline file-pill">IMPORT JSON<input id="import" type="file" accept="application/json,.json" hidden></label></div></div>
+      </section>
+
+      <section id="view-patch" class="view hidden">
+        <div class="page-title"><div><span class="eyebrow">ONE DMX UNIVERSE</span><h1>Fixture patch</h1></div><p>The included moving head and pixel tube modes are placeholders. Check each fixture manual before assigning real DMX addresses and channels.</p></div>
+        <div class="notice">This patch powers the virtual stage. Verify physical fixture modes and addresses before enabling Micro output.</div>
+        <div id="patch-error" class="error hidden"></div><div id="manual-desk"></div><div id="patch-list" class="patch-list"></div>
+        <div id="patch-reminder" class="notice hidden" role="status"></div>
+        <div class="section-heading"><div><span class="eyebrow">FIXTURE REFERENCE</span><h2>DMX chart photos</h2></div><p>Take a photo on the iPad; it appears here on the Mac automatically.</p></div>
+        <div class="output-card chart-panel">
+          <label class="primary file-pill" for="chart-photo">📷 TAKE PHOTO / CHOOSE IMAGE<input id="chart-photo" type="file" accept="image/*" capture="environment" hidden></label>
+          <span id="chart-upload-status" role="status" aria-live="polite"></span>
+          <p class="hint">Photograph the fixture's DMX channel chart clearly. The Mac stores the original photo for reference; automatic channel recognition is planned separately.</p>
+          <div id="chart-gallery" class="chart-gallery"></div>
+          <div id="chart-preview" class="chart-preview hidden"><strong id="chart-preview-name"></strong><img id="chart-preview-image" alt="Selected DMX chart photo"></div>
+        </div>
+      </section>
+
+      <section id="view-groups" class="view hidden">
+        <div class="page-title"><div><span class="eyebrow">FIXTURE SELECTION</span><h1>Groups</h1></div><p>Create named groups, control their dimmer, and apply color/movement settings to a group.</p></div>
+        <div class="output-grid"><div class="output-card"><label>GROUP NAME<input id="group-name" placeholder="Rear heads"></label><div class="inline-actions"><button id="select-all" class="outline">ALL</button><button id="select-odd" class="outline">ODD</button><button id="select-even" class="outline">EVEN</button><button id="select-none" class="outline">NONE</button></div><div id="group-fixtures" class="fixture-checks"></div><button id="group-create" class="primary">CREATE GROUP</button></div><div id="group-list" class="group-list"></div></div>
+      </section>
+      <section id="view-profiles" class="view hidden">
+        <div class="page-title"><div><span class="eyebrow">FIXTURE LIBRARY</span><h1>Fixture profiles</h1></div><p>Open a JSON profile or import a folder, choose a mode, then add fixtures.</p></div>
+        <div class="output-grid"><div class="output-card">
+          <div class="inline-actions"><input id="profile-query" placeholder="Manufacturer / model"><button hidden id="profile-search" class="primary">SEARCH OFL</button><button hidden id="profile-web" class="outline">SEARCH WEB + AI</button></div>
+          <div id="profile-results" class="profile-results"></div>
+          <div class="section-heading"><h2>Local library</h2><button hidden id="profile-new" class="outline">+ CUSTOM</button></div><p class="hint">BitBeam Fixture Profile JSON, legacy BeatBeam JSON and simple OFL JSON are supported.</p><div id="profile-library" class="profile-results"></div>
+          <label class="outline file-pill">OPEN JSON FILE<input id="profile-import" type="file" accept=".json,application/json" multiple hidden></label>
+          <label class="outline file-pill">IMPORT LIBRARY FOLDER<input id="profile-folder" type="file" webkitdirectory multiple hidden></label>
+          <button hidden id="profile-export-json" class="outline">DOWNLOAD PROFILE JSON</button>
+          <div hidden id="profile-legacy-import47">
+            <input id="profile-photo" type="file" accept="image/*" multiple><input id="manual-upload" type="file" accept="application/pdf,.pdf">
+            <div id="profile-documents" class="profile-results"></div>
+          </div><span id="profile-status" role="status"></span>
+        </div><div class="output-card">
+          <h2 id="profile-title">Profile editor</h2><p id="profile-warning" class="hint"></p><select id="profile-mode" aria-label="DMX mode"></select>
+          <div id="profile-channels" class="channel-preview"></div>
+          <details><summary>Edit full profile JSON</summary><textarea id="profile-json" rows="16" spellcheck="false" aria-label="Profile JSON"></textarea><button id="profile-json-apply" class="outline">VALIDATE CHANGES</button></details>
+          <label class="checkline"><input id="profile-reviewed" type="checkbox"> I checked the mode and channel chart against the manual</label>
+          <div class="inline-actions"><button id="profile-save" class="outline">SAVE TO LIBRARY</button><button id="profile-export" class="outline">EXPORT PROFILE</button></div>
+          <div class="settings-grid"><label>QUANTITY<input id="profile-quantity" type="number" min="1" max="32" value="1"></label><label>START ADDRESS<input id="profile-address" type="number" min="1" max="512" value="1"></label><label>UNIVERSE<input id="profile-universe" type="number" min="0" max="32767" value="0"></label></div>
+          <button id="profile-add" class="primary">ADD FIXTURES WITH THIS MODE</button>
+        </div></div>
+      </section>
+      <section id="view-advanced" class="view hidden">
+        <div class="page-title"><div><span class="eyebrow">AUDIO · COMMANDS · REFERENCE POINTS</span><h1>Advanced controls</h1></div></div>
+        <div class="output-grid">
+        <div class="output-card"><h2>Text / voice commands</h2><textarea id="command-text" rows="3" placeholder="blue on 2,4,6 · dimmer 50% on 1,3,5"></textarea><label class="checkline"><input id="command-ai" type="checkbox"> Use AI for complex commands (sends text and fixture maps)</label><div class="inline-actions"><button id="command-voice" class="outline">🎤 DICTATE</button><button id="command-preview" class="primary">PREVIEW COMMAND</button><button id="command-apply" class="outline" disabled>APPLY</button></div><p id="command-result" class="hint">Basic color and brightness commands work without AI. Dictation uses the browser speech service; availability depends on the browser.</p></div>
+        <div class="output-card"><h2>Modules (AI-friendly)</h2><p>Modules receive the live show state, fixtures, audio levels, kick events and the DMX frame. Install a module .js file into the modules folder on the Mac (see CHANGES_MUSE.md), then enable it here.</p><div id="module-list" class="module-list"><p class="hint">Loading modules…</p></div><p class="hint">Disabling a module stops its updates immediately; enabling loads it right away.</p></div>
+        <div class="output-card calibration-panel"><h2>Calibration reference points</h2><p>Record each moving head's Pan/Tilt at the same stage marks, then recall all heads at a recorded mark. This stores measured positions; geometric targeting between marks is not included. Physical alignment becomes possible after DMX output is connected.</p><div class="settings-grid"><label>CALIBRATION GROUP<select id="cal-group"></select></label><label>FIXTURE<select id="cal-fixture"></select></label><label>STAGE MARK<select id="cal-point"></select></label><label>NAME<input id="cal-name"></label><label>MARK X (m)<input id="cal-x" type="number" step=".1"></label><label>MARK Y (m)<input id="cal-y" type="number" step=".1"></label></div><div class="settings-grid"><label>PAN (%)<input id="cal-pan" type="range" min="0" max="100" value="50"></label><label>TILT (%)<input id="cal-tilt" type="range" min="0" max="100" value="50"></label></div><div class="inline-actions"><button id="cal-group-add" class="outline">+ CAL GROUP</button><button id="cal-group-assign" class="outline">ASSIGN SELECTED FIXTURES</button><button id="cal-aim" class="outline">PREVIEW AIM</button><button id="cal-store" class="primary">STORE THIS FIXTURE AT MARK</button><button id="cal-recall" class="outline">RECALL ALL HEADS AT MARK</button><button id="cal-add" class="outline">+ MARK</button><button id="cal-update" class="outline">UPDATE MARK</button></div><p id="cal-status" class="hint"></p></div>
+      </section>
+      <section id="view-connect" class="view hidden">
+        <div class="page-title"><div><span class="eyebrow">MAC HOST + IPAD REMOTE</span><h1>Connection</h1></div><p>All scenes live on the Mac. The iPad controls them over local Wi-Fi; no SoundSwitch Desktop is used.</p></div>
+        <div class="output-grid"><div class="output-card"><span class="eyebrow">CURRENT OUTPUT</span><h2 id="output-label">Simulator only</h2><p id="output-description">Remote control and 3D preview are active. USB DMX output uses the selected adapter on the host computer. Click CONNECT to choose and authorize the interface. Keep BeatBeam running; minimizing is supported.</p><p class="hint">Mac and iPad must use the same local network. The host window shows the iPad address and a two-digit pairing code.</p><p id="ipad-connect-info" class="hint"></p><button id="trusted-revoke">FORGET ALL PAIRED DEVICES</button><p id="connection-detail" class="hint">Connecting to Mac host…</p></div>
+          <div class="output-card"><span class="eyebrow">USB INTERFACE IDENTIFICATION</span><h2>USB device IDs</h2><p>Plug the USB DMX interface into the Mac, then scan. This reads device names and IDs; it does not send DMX.</p><button id="scan-usb" class="outline">SCAN MAC USB DEVICES</button><div id="usb-list" class="usb-list"><p class="hint">Scan when your adapter is connected.</p></div></div></div>
+        <div class="output-card" id="link-card"><h2>Ableton Link — DJ tempo</h2><p>Joins the Ableton Link session as a read-only peer and takes the live tempo (fractional) and beat grid from the DJ app — djay Pro, Serato, Traktor, Live — on the same Wi-Fi. BitBeam never sets the session tempo. Tempo priority: Link &gt; skeleton (locked track) &gt; mic.</p><div class="link-row"><button id="link-toggle" class="primary">▶ START LINK</button><button id="link-downbeat" class="outline">↓ MARK BEAT 1</button></div><p class="link-status" id="link-bridge">Bridge: —</p><p class="link-status" id="link-session">Session: —</p><p class="link-status" id="link-peers">Peers: —</p><p class="link-status" id="link-tempo">Tempo: —</p><p class="link-status" id="link-source">Tempo source: —</p><p class="link-status" id="link-offset">Downbeat offset: —</p><p class="link-status link-error" id="link-error"></p><p class="hint">Link phase 0 is a bar line of the shared grid, not the track's bar 1 — press MARK BEAT 1 on the track's downbeat. In djay Pro: Main Volume → Ableton Link. Same Wi-Fi, no VPN.</p></div>
+        <div hidden class="output-card ai-config"><span class="eyebrow">OPTIONAL PROFILE RECOGNITION</span><h2>AI connection</h2><p id="ai-state">Checking configuration…</p><label>OPENAI API KEY<input id="ai-key" type="password" autocomplete="off" placeholder="Enter on Mac only"></label><label>MODEL<input id="ai-model" value="gpt-4.1"></label><button id="ai-save" class="outline">SAVE AI SETTINGS ON MAC</button><p class="hint">The key stays on the Mac and is never sent to the iPad. ChatGPT Plus does not include this API usage. Library search and manual profile editing work without AI.</p></div>
+      </section>
+    </main>
+    <div id="toast" class="toast hidden" role="status"></div>
+    <div id="pair-screen" class="pair-screen hidden"><form id="pair-form" class="pair-card"><span class="brand-mark">◈</span><span class="eyebrow">BEATBEAM REMOTE</span><h1>Pair with Mac</h1><p>Enter the two-digit code printed in the BeatBeam host window on your MacBook.</p><label for="pair-pin">PAIRING CODE</label><input id="pair-pin" type="text" pattern="[0-9]{2}" inputmode="numeric" autocomplete="one-time-code" maxlength="2" required placeholder="00"><button class="primary" type="submit">CONNECT</button><span id="pair-error" role="alert"></span></form></div>
+  </div>
+  <script src="./dialogs.js"></script><script src="./select-on-focus74.js"></script><script src="./ssl2.js"></script><script src="./fixture-transform48.js"></script>
+<script src="./fixture-geometry49.js"></script><script src="./fixture-visual42.js"></script><script src="./profiles.js"></script><script src="./profile-normalizer47.js"></script>
+  <script src="./fixture-ranges.js"></script><script src="./common-reference.js"></script><script src="./positions35.js"></script><script src="./random-wave38.js"></script><script src="./live-strobe38.js"></script><script src="./random-motion37.js"></script><script src="./visual-calibration36.js"></script><script src="./cell-effects42.js"></script><script src="./laser73.js"></script><script src="./prism74.js"></script><script src="./random-gobo82.js"></script><script src="./head-kinematics69.js"></script><script src="./motion-freeze69.js"></script><script src="./heads68.js"></script><script src="./profile-mechanics71.js"></script><script src="./smoke71.js"></script><script src="./engine.js"></script>
+  <script src="./fixture-pose.js"></script><script src="./moving-head-model.js"></script><script src="./selection-bridge.js"></script><script src="./visualizer.js"></script>
+  <script src="./manual-documents.js"></script><link rel="stylesheet" href="./profile-wizard42.css"><script src="./random-parts76.js"></script><script src="./studio.js"></script>
+  
+  <script src="./bpm-stabilize87.js"></script>
+  <script src="./advanced.js"></script>
+  
+  
+  <script src="./control-values35.js"></script><script src="./aim71.js"></script><script src="./composition35.js"></script><link rel="stylesheet" href="./dmx-map64.css"><script src="./tap87.js"></script><script src="./app.js"></script><script src="./look-interactions.js"></script><script src="./units49.js"></script>
+<script src="./dimensions49.js"></script>
+<script src="./stage-objects49.js"></script>
+
+<script src="./scene-objects-ui49.js"></script>
+<script src="./revision09.js"></script>
+<script src="./stagefocus.js"></script><script src="./design11.js"></script><script src="./control-scale50.js"></script><script src="./design13.js"></script><script src="./design14.js"></script><script src="./design15.js"></script><script src="./limits73.js"></script><script src="./midi-map73.js"></script><script src="./midi73.js"></script><script src="./dimensions73.js"></script><script src="./release14.js"></script><script src="./selection-contour.js"></script><script type="module" src="./render3d.js"></script>
+<script src="./calibration-reference.js"></script><script src="./design19.js"></script><script src="./interface-theme50.js"></script><script src="./bitbeam-theme.js"></script><script src="./release26.js"></script><script src="./release27.js"></script><script src="./release28.js"></script><link rel="stylesheet" href="./release28.css"><script src="./ranges31.js"></script><link rel="stylesheet" href="./ranges31.css"><script src="./release32.js"></script><link rel="stylesheet" href="./release32.css">
+<link rel="stylesheet" href="./radial-panels.css"><script src="./radial-panels-site.js"></script><script src="./movement-editor82.js"></script>
+<script src="./release35.js"></script><link rel="stylesheet" href="./release35.css"><link rel="stylesheet" href="./release36.css"><script src="./workspace35.js"></script>
+<link rel="stylesheet" href="./release38-ui.css">
+<link rel="stylesheet" href="./release45.css">
+<link rel="stylesheet" href="./release49.css"><script src="./release38-ui.js"></script>
+<link rel="stylesheet" href="./release69.css"><link rel="stylesheet" href="./release70.css"><link rel="stylesheet" href="./dimensions73.css"><script src="./release70.js"></script><script src="./freeze-banner80.js"></script><script src="./preview-store80.js"></script><script src="./look-draft0014.js"></script>
+<script src="./downbeat88.js"></script><script src="./autoshow88.js"></script><script src="./beat-ui110.js"></script>
+
+<script src="./site-mode.js"></script>
+</body>
+</html>
