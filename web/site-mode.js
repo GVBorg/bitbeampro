@@ -22,7 +22,7 @@
  }
  const HIDE=['#bb-voice','#bb-link','#bb-link-downbeat','header.topbar nav','header.topbar .top-actions','#midi-open73',
   '.preview-row80','.look-search-row','.bank-tabs','#save-look',
-  '.viz-control-wheels','#calibration-targets69','#viz-spectrogram',
+  '#calibration-targets69','#viz-spectrogram',
   '.live-vz-main28 > :not(.viz-main):not(.wheels-row)','.viz-sidebar > :not(#viz-group-picker)',
   '#viz-group-picker > :not(h3):not(.group-picker-list)','.bb-menu details','#positions35'];
  function hide(){for(const sel of HIDE)for(const el of document.querySelectorAll(sel))if(el.style.getPropertyValue('display')!=='none')el.style.setProperty('display','none','important');
