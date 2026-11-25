@@ -26,10 +26,9 @@ body.bb-site .look-save-actions { display: grid !important; grid-template-column
 
 /* ---- centre: the visualizer only ---- */
 body.bb-site .viz-toolbar > :not(strong):not(select):not(span):not(#stage-fit):not(#stage-fullscreen):not(#stage-daylight):not(.stage-eco79),
-body.bb-site .viz-control-wheels,
 body.bb-site #calibration-targets69,
 body.bb-site #viz-spectrogram,
-body.bb-site .live-vz-main28 > :not(.viz-main):not(.wheels-row) { display: none !important; }
+body.bb-site .live-vz-main28 > :not(.viz-main):not(.wheels-row):not(.viz-control-wheels) { display: none !important; }
 /* zoom − / + stay: they are the two small buttons after Grid */
 body.bb-site .viz-toolbar > button[title*="oom" i] { display: inline-flex !important; }
 
